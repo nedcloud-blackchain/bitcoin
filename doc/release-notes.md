@@ -35,8 +35,8 @@ How to Upgrade
 
 If you are running an older version, shut it down. Wait until it has completely
 shut down (which might take a few minutes in some cases), then run the
-installer (on Windows) or just copy over `/Applications/Bitcoin-Qt` (on Mac)
-or `bitcoind`/`bitcoin-qt` (on Linux).
+installer (on Windows) or just copy over `/Applications/Blackcoin-Qt` (on Mac)
+or `blackcoind`/`blackcoin-qt` (on Linux).
 
 Upgrading directly from a version of Bitcoin Core that has reached its EOL is
 possible, but it might take some time if the data directory needs to be migrated. Old
@@ -57,7 +57,7 @@ Notable changes
 P2P and network changes
 -----------------------
 
-- A bitcoind node will no longer rumour addresses to inbound peers by default.
+- A blackcoind node will no longer rumour addresses to inbound peers by default.
   They will become eligible for address gossip after sending an ADDR, ADDRV2,
   or GETADDR message. (#21528)
 
@@ -106,7 +106,7 @@ Updated RPCs
   `-deprecated=fees` if needed in this version). The same fee fields can be accessed
   through the `fees` object in the result. WARNING: deprecated
   fields `ancestorfees` and `descendantfees` are denominated in sats, whereas all
-  fields in the `fees` object are denominated in BTC. (#22689)
+  fields in the `fees` object are denominated in BLK. (#22689)
 
 - Both `createmultisig` and `addmultisigaddress` now include a `warnings`
   field, which will show a warning if a non-legacy address type is requested

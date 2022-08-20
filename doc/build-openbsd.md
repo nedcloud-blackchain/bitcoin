@@ -2,7 +2,7 @@ OpenBSD build guide
 ======================
 (updated for OpenBSD 6.9)
 
-This guide describes how to build bitcoind, bitcoin-qt, and command-line utilities on OpenBSD.
+This guide describes how to build blackcoind, blackcoin-qt, and command-line utilities on OpenBSD.
 
 Preparation
 -------------
@@ -48,7 +48,7 @@ from the root of the repository. Then set `BDB_PREFIX` for the next section:
 export BDB_PREFIX="$PWD/db4"
 ```
 
-### Building Bitcoin Core
+### Building Blackcoin Core
 
 **Important**: Use `gmake` (the non-GNU `make` will exit with an error).
 

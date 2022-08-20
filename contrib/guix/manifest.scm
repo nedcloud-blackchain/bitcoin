@@ -145,7 +145,7 @@ chain for " target " development."))
     xglibc "libc_cv_ssp" "no")
    "libc_cv_ssp_strong" "no"))
 
-(define* (make-bitcoin-cross-toolchain target
+(define* (make-blackcoin-cross-toolchain target
                                        #:key
                                        (base-gcc-for-libc gcc-7)
                                        (base-kernel-headers linux-libre-headers-4.9)
@@ -546,7 +546,7 @@ inspecting signatures in Mach-O binaries.")
                                            "glibc-2.24-elfm-loadaddr-dynamic-rewrite.patch"
                                            "glibc-2.24-no-build-time-cxx-header-run.patch"))))))
 
-(define-public glibc-2.27/bitcoin-patched
+(define-public glibc-2.27/blackcoin-patched
   (package
     (inherit glibc-2.31)
     (version "2.27")
@@ -612,11 +612,11 @@ inspecting signatures in Mach-O binaries.")
                  osslsigncode))
           ((string-contains target "-linux-")
            (list (cond ((string-contains target "riscv64-")
-                        (make-bitcoin-cross-toolchain target
-                                                      #:base-libc glibc-2.27/bitcoin-patched
+                        (make-blackcoin-cross-toolchain target
+                                                      #:base-libc glibc-2.27/blackcoin-patched
                                                       #:base-kernel-headers linux-libre-headers-4.19))
                        (else
-                        (make-bitcoin-cross-toolchain target)))))
+                        (make-blackcoin-cross-toolchain target)))))
           ((string-contains target "darwin")
            (list clang-toolchain-10 binutils cmake xorriso python-signapple))
           (else '())))))

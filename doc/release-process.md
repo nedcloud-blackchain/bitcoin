@@ -147,26 +147,26 @@ Codesigner only: Create Windows/macOS detached signatures:
 
 Codesigner only: Sign the macOS binary:
 
-    transfer bitcoin-osx-unsigned.tar.gz to macOS for signing
-    tar xf bitcoin-osx-unsigned.tar.gz
+    transfer blackcoin-osx-unsigned.tar.gz to macOS for signing
+    tar xf blackcoin-osx-unsigned.tar.gz
     ./detached-sig-create.sh -s "Key ID"
     Enter the keychain password and authorize the signature
     Move signature-osx.tar.gz back to the guix-build host
 
 Codesigner only: Sign the windows binaries:
 
-    tar xf bitcoin-win-unsigned.tar.gz
+    tar xf blackcoin-win-unsigned.tar.gz
     ./detached-sig-create.sh -key /path/to/codesign.key
     Enter the passphrase for the key when prompted
     signature-win.tar.gz will be created
 
 Code-signer only: It is advised to test that the code signature attaches properly prior to tagging by performing the `guix-codesign` step.
-However if this is done, once the release has been tagged in the bitcoin-detached-sigs repo, the `guix-codesign` step must be performed again in order for the guix attestation to be valid when compared against the attestations of non-codesigner builds.
+However if this is done, once the release has been tagged in the blackcoin-detached-sigs repo, the `guix-codesign` step must be performed again in order for the guix attestation to be valid when compared against the attestations of non-codesigner builds.
 
 Codesigner only: Commit the detached codesign payloads:
 
 ```sh
-pushd ./bitcoin-detached-sigs
+pushd ./blackcoin-detached-sigs
 # checkout the appropriate branch for this release series
 rm -rf ./*
 tar xf signature-osx.tar.gz
@@ -181,7 +181,7 @@ popd
 Non-codesigners: wait for Windows/macOS detached signatures:
 
 - Once the Windows/macOS builds each have 3 matching signatures, they will be signed with their respective release keys.
-- Detached signatures will then be committed to the [bitcoin-detached-sigs](https://github.com/bitcoin-core/bitcoin-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
+- Detached signatures will then be committed to the [blackcoin-detached-sigs](https://github.com/bitcoin-core/bitcoin-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
 
 Create (and optionally verify) the codesigned outputs:
 
@@ -206,8 +206,8 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
 ```
 
 
-- Upload to the bitcoincore.org server (`/var/www/bin/bitcoin-core-${VERSION}/`):
-    1. The contents of each `./bitcoin/guix-build-${VERSION}/output/${HOST}/` directory, except for
+- Upload to the bitcoincore.org server (`/var/www/bin/blackcoin-core-${VERSION}/`):
+    1. The contents of each `./blackcoin/guix-build-${VERSION}/output/${HOST}/` directory, except for
        `*-debug*` files.
 
        Guix will output all of the results into host subdirectories, but the SHA256SUMS
@@ -223,17 +223,17 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
        nor put them in the torrent*.
 
        ```sh
-       find guix-build-${VERSION}/output/ -maxdepth 2 -type f -not -name "SHA256SUMS.part" -and -not -name "*debug*" -exec scp {} user@bitcoincore.org:/var/www/bin/bitcoin-core-${VERSION} \;
+       find guix-build-${VERSION}/output/ -maxdepth 2 -type f -not -name "SHA256SUMS.part" -and -not -name "*debug*" -exec scp {} user@bitcoincore.org:/var/www/bin/blackcoin-core-${VERSION} \;
        ```
 
     2. The `SHA256SUMS` file
 
     3. The `SHA256SUMS.asc` combined signature file you just created
 
-- Create a torrent of the `/var/www/bin/bitcoin-core-${VERSION}` directory such
-  that at the top level there is only one file: the `bitcoin-core-${VERSION}`
+- Create a torrent of the `/var/www/bin/blackcoin-core-${VERSION}` directory such
+  that at the top level there is only one file: the `blackcoin-core-${VERSION}`
   directory containing everything else. Name the torrent
-  `bitcoin-${VERSION}.torrent` (note that there is no `-core-` in this name).
+  `blackcoin-${VERSION}.torrent` (note that there is no `-core-` in this name).
 
   Optionally help seed this torrent. To get the `magnet:` URI use:
 
@@ -263,17 +263,17 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
 
       - Install the new Bitcoin Core release
 
-      - Run bitcoind on regtest
+      - Run blackcoind on regtest
 
       - Clone the [bitcoincore.org repository](https://github.com/bitcoin-core/bitcoincore.org)
 
-      - Run: `go run generate.go` while being in `contrib/doc-gen` folder, and with bitcoin-cli in PATH
+      - Run: `go run generate.go` while being in `contrib/doc-gen` folder, and with blackcoin-cli in PATH
 
       - Add the generated files to git
 
   - Update packaging repo
 
-      - Push the flatpak to flathub, e.g. https://github.com/flathub/org.bitcoincore.bitcoin-qt/pull/2
+      - Push the flatpak to flathub, e.g. https://github.com/flathub/org.bitcoincore.blackcoin-qt/pull/2
 
       - Push the snap, see https://github.com/bitcoin-core/packaging/blob/master/snap/build.md
 

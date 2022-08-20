@@ -152,7 +152,7 @@ struct WitnessUnknown
  *  * WitnessV0KeyHash: TxoutType::WITNESS_V0_KEYHASH destination (P2WPKH)
  *  * WitnessV1Taproot: TxoutType::WITNESS_V1_TAPROOT destination (P2TR)
  *  * WitnessUnknown: TxoutType::WITNESS_UNKNOWN destination (P2W???)
- *  A CTxDestination is the internal data type encoded in a bitcoin address
+ *  A CTxDestination is the internal data type encoded in a blackcoin address
  */
 using CTxDestination = std::variant<CNoDestination, PKHash, ScriptHash, WitnessV0ScriptHash, WitnessV0KeyHash, WitnessV1Taproot, WitnessUnknown>;
 
@@ -182,7 +182,7 @@ TxoutType Solver(const CScript& scriptPubKey, std::vector<std::vector<unsigned c
 bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet);
 
 /**
- * Generate a Bitcoin scriptPubKey for the given CTxDestination. Returns a P2PKH
+ * Generate a Blackcoin scriptPubKey for the given CTxDestination. Returns a P2PKH
  * script for a CKeyID destination, a P2SH script for a CScriptID, and an empty
  * script for CNoDestination.
  */

@@ -86,7 +86,7 @@ public:
 
 #ifdef ENABLE_WALLET
     /** Set the wallet model.
-        The wallet model represents a bitcoin wallet, and offers access to the list of transactions, address book and sending
+        The wallet model represents a blackcoin wallet, and offers access to the list of transactions, address book and sending
         functionality.
     */
     void addWallet(WalletModel* walletModel);
@@ -283,7 +283,7 @@ public Q_SLOTS:
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
-    /** Load Partially Signed Bitcoin Transaction from file or clipboard */
+    /** Load Partially Signed Blackcoin Transaction from file or clipboard */
     void gotoLoadPSBT(bool from_clipboard = false);
 
     /** Show open dialog */

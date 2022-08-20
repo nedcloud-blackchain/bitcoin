@@ -2,17 +2,17 @@
 
 *.exe
 *.pdb
-src/bitcoin
-src/bitcoind
-src/bitcoin-cli
-src/bitcoin-gui
-src/bitcoin-node
-src/bitcoin-tx
-src/bitcoin-util
-src/bitcoin-wallet
+src/blackcoin
+src/blackcoind
+src/blackcoin-cli
+src/blackcoin-gui
+src/blackcoin-node
+src/blackcoin-tx
+src/blackcoin-util
+src/blackcoin-wallet
 src/test/fuzz/fuzz
-src/test/test_bitcoin
-src/qt/test/test_bitcoin-qt
+src/test/test_blackcoin
+src/qt/test/test_blackcoin-qt
 
 # autoreconf
 Makefile.in
@@ -51,11 +51,11 @@ src/qt/forms/ui_*.h
 
 src/qt/test/moc*.cpp
 
-src/qt/bitcoin-qt.config
-src/qt/bitcoin-qt.creator
-src/qt/bitcoin-qt.creator.user
-src/qt/bitcoin-qt.files
-src/qt/bitcoin-qt.includes
+src/qt/blackcoin-qt.config
+src/qt/blackcoin-qt.creator
+src/qt/blackcoin-qt.creator.user
+src/qt/blackcoin-qt.files
+src/qt/blackcoin-qt.includes
 
 .deps
 .dirstamp
@@ -94,15 +94,15 @@ src/qt/bitcoin-qt.includes
 *.qm
 Makefile
 !depends/Makefile
-src/qt/bitcoin-qt
-Bitcoin-Qt.app
+src/qt/blackcoin-qt
+blackcoin-Qt.app
 
 # Qt Creator
 Makefile.am.user
 
 # Unit-tests
 Makefile.test
-bitcoin-qt_test
+blackcoin-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -118,7 +118,7 @@ releases
 *.gcno
 *.gcda
 /*.info
-test_bitcoin.coverage/
+test_blackcoin.coverage/
 total.coverage/
 fuzz.coverage/
 coverage_percent.txt
@@ -150,3 +150,7 @@ osx_volname
 dist/
 
 /guix-build-*
+
+# Visual Studio
+.vscode/*
+.vs/*

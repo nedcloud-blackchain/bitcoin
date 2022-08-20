@@ -130,7 +130,7 @@ class ReplaceByFeeTest(BitcoinTestFramework):
         # This will raise an exception due to insufficient fee
         assert_raises_rpc_error(-26, "insufficient fee", self.nodes[0].sendrawtransaction, tx1b_hex, 0)
 
-        # Extra 0.1 BTC fee
+        # Extra 0.1 BLK fee
         tx1b.vout[0].nValue -= int(0.1 * COIN)
         tx1b_hex = tx1b.serialize().hex()
         # Works when enabled
@@ -163,7 +163,7 @@ class ReplaceByFeeTest(BitcoinTestFramework):
             prevout = COutPoint(int(txid, 16), 0)
 
         # Whether the double-spend is allowed is evaluated by including all
-        # child fees - 4 BTC - so this attempt is rejected.
+        # child fees - 4 BLK - so this attempt is rejected.
         dbl_tx = CTransaction()
         dbl_tx.vin = [CTxIn(tx0_outpoint, nSequence=0)]
         dbl_tx.vout = [CTxOut(initial_nValue - 3 * COIN, DUMMY_P2WPKH_SCRIPT)]
@@ -233,7 +233,7 @@ class ReplaceByFeeTest(BitcoinTestFramework):
         # This will raise an exception due to insufficient fee
         assert_raises_rpc_error(-26, "insufficient fee", self.nodes[0].sendrawtransaction, dbl_tx_hex, 0)
 
-        # 0.1 BTC fee is enough
+        # 0.1 BLK fee is enough
         dbl_tx = CTransaction()
         dbl_tx.vin = [CTxIn(tx0_outpoint, nSequence=0)]
         dbl_tx.vout = [CTxOut(initial_nValue - fee * n - int(0.1 * COIN), DUMMY_P2WPKH_SCRIPT)]

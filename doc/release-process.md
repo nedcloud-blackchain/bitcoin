@@ -92,7 +92,7 @@ Generate list of authors:
 
 ### Setup and perform Guix builds
 
-Checkout the Bitcoin Core version you'd like to build:
+Checkout the Blackcoin Core version you'd like to build:
 
 ```sh
 pushd ./bitcoin
@@ -261,7 +261,7 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
 
       - Install [golang](https://golang.org/doc/install)
 
-      - Install the new Bitcoin Core release
+      - Install the new Blackcoin Core release
 
       - Run blackcoind on regtest
 

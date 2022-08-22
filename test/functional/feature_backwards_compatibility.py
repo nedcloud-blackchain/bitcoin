@@ -225,7 +225,7 @@ class BackwardsCompatibilityTest(BitcoinTestFramework):
             node_v17.assert_start_raises_init_error(["-wallet=w2"], "Error: wallet.dat corrupt, salvage failed")
             node_v17.assert_start_raises_init_error(["-wallet=w3"], "Error: wallet.dat corrupt, salvage failed")
         else:
-            node_v17.assert_start_raises_init_error(["-wallet=w3"], "Error: Error loading w3: Wallet requires newer version of Bitcoin Core")
+            node_v17.assert_start_raises_init_error(["-wallet=w3"], "Error: Error loading w3: Wallet requires newer version of Blackcoin Core")
         self.start_node(node_v17.index)
 
         if not self.options.descriptors:
@@ -255,7 +255,7 @@ class BackwardsCompatibilityTest(BitcoinTestFramework):
 
         if self.is_bdb_compiled():
             # Old wallets are BDB and will only work if BDB is compiled
-            # Copy the 0.16 wallet to the last Bitcoin Core version and open it:
+            # Copy the 0.16 wallet to the last Blackcoin Core version and open it:
             shutil.copyfile(
                 os.path.join(node_v16_wallets_dir, "wallets/u1_v16"),
                 os.path.join(node_master_wallets_dir, "u1_v16")
@@ -279,7 +279,7 @@ class BackwardsCompatibilityTest(BitcoinTestFramework):
             info = wallet.validateaddress(v16_addr)
             assert_equal(info, v16_info)
 
-            # Copy the 0.17 wallet to the last Bitcoin Core version and open it:
+            # Copy the 0.17 wallet to the last Blackcoin Core version and open it:
             node_v17.unloadwallet("u1_v17")
             shutil.copytree(
                 os.path.join(node_v17_wallets_dir, "u1_v17"),
@@ -303,7 +303,7 @@ class BackwardsCompatibilityTest(BitcoinTestFramework):
             info = wallet.getaddressinfo(address)
             assert_equal(info, v17_info)
 
-            # Copy the 0.19 wallet to the last Bitcoin Core version and open it:
+            # Copy the 0.19 wallet to the last Blackcoin Core version and open it:
             shutil.copytree(
                 os.path.join(node_v19_wallets_dir, "w1_v19"),
                 os.path.join(node_master_wallets_dir, "w1_v19")

@@ -48,6 +48,9 @@
 #include <versionbits.h>
 #include <warnings.h>
 
+//Blackcoin: Proof-of-Stake
+#include <pos.h>
+
 #include <stdint.h>
 
 #include <univalue.h>

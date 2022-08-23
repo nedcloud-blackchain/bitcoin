@@ -69,6 +69,7 @@ struct BIP9Deployment {
  */
 struct Params {
     uint256 hashGenesisBlock;
+    int nMaxReorganizationDepth;
     int nSubsidyHalvingInterval;
     /* Block hash that is excepted from BIP16 enforcement */
     uint256 BIP16Exception;
@@ -98,11 +99,28 @@ struct Params {
     BIP9Deployment vDeployments[MAX_VERSION_BITS_DEPLOYMENTS];
     /** Proof of work parameters */
     uint256 powLimit;
+    uint256 posLimit;
+    uint256 posLimitV2;
     bool fPowAllowMinDifficultyBlocks;
+    int64_t nTargetSpacingV1;
     bool fPowNoRetargeting;
+    bool fPoSNoRetargeting;
     int64_t nPowTargetSpacing;
     int64_t nPowTargetTimespan;
+    int64_t nTargetSpacing;
+    int64_t nTargetTimespan;
     int64_t DifficultyAdjustmentInterval() const { return nPowTargetTimespan / nPowTargetSpacing; }
+    int64_t nProtocolV1RetargetingFixedTime;
+    int64_t nProtocolV2Time;
+    int64_t nProtocolV3Time;
+    int64_t nProtocolV3_1Time;
+    bool IsProtocolV1RetargetingFixed(int64_t nTime) const { return nTime > nProtocolV1RetargetingFixedTime && nTime != 1395631999; }
+    bool IsProtocolV2(int64_t nTime) const { return nTime > nProtocolV2Time && nTime != 1407053678; }
+    bool IsProtocolV3(int64_t nTime) const { return nTime > nProtocolV3Time && nTime != 1444028400; }
+    bool IsProtocolV3_1(int64_t nTime) const { return nTime > nProtocolV3_1Time && nTime != 4102437600; }
+    int nLastPOWBlock;
+    int nStakeTimestampMask;
+    int nCoinbaseMaturity;
     /** The best chain should have at least this much work */
     uint256 nMinimumChainWork;
     /** By default assume that the signatures in ancestors of this block are valid */

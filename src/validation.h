@@ -41,6 +41,7 @@
 class CChainState;
 class CBlockTreeDB;
 class CChainParams;
+class CWallet;
 class CTxMemPool;
 class ChainstateManager;
 struct ChainTxData;
@@ -52,6 +53,8 @@ namespace node {
 class SnapshotMetadata;
 } // namespace node
 
+/** Blackcoin: Minimum fee for transactions */
+static const unsigned int MIN_TX_FEE_PER_KB = 100000;
 /** Default for -minrelaytxfee, minimum relay fee for transactions */
 static const unsigned int DEFAULT_MIN_RELAY_TX_FEE = 1000;
 /** Default for -limitancestorcount, max number of in-mempool ancestors */
@@ -79,8 +82,8 @@ static const int MAX_SCRIPTCHECK_THREADS = 15;
 /** -par default (number of script-checking threads, 0 = auto) */
 static const int DEFAULT_SCRIPTCHECK_THREADS = 0;
 static const int64_t DEFAULT_MAX_TIP_AGE = 24 * 60 * 60;
-static const bool DEFAULT_CHECKPOINTS_ENABLED = true;
-static const bool DEFAULT_TXINDEX = false;
+static const bool DEFAULT_CHECKPOINTS_ENABLED = false;
+static const bool DEFAULT_TXINDEX = true;
 static constexpr bool DEFAULT_COINSTATSINDEX{false};
 static const char* const DEFAULT_BLOCKFILTERINDEX = "0";
 /** Default for -persistmempool */
@@ -88,9 +91,9 @@ static const bool DEFAULT_PERSIST_MEMPOOL = true;
 /** Default for -stopatheight */
 static const int DEFAULT_STOPATHEIGHT = 0;
 /** Block files containing a block-height within MIN_BLOCKS_TO_KEEP of ActiveChain().Tip() will not be pruned. */
-static const unsigned int MIN_BLOCKS_TO_KEEP = 288;
-static const signed int DEFAULT_CHECKBLOCKS = 6;
-static constexpr int DEFAULT_CHECKLEVEL{3};
+static const unsigned int MIN_BLOCKS_TO_KEEP = 5000;
+static const signed int DEFAULT_CHECKBLOCKS = 64;
+static constexpr int DEFAULT_CHECKLEVEL{4};
 // Require that user allocate at least 550 MiB for block & undo files (blk???.dat and rev???.dat)
 // At 1MB per block, 288 blocks = 288MB.
 // Add 15% for Undo data = 331MB
@@ -120,6 +123,8 @@ extern bool g_parallel_script_checks;
 extern bool fRequireStandard;
 extern bool fCheckBlockIndex;
 extern bool fCheckpointsEnabled;
+extern int64_t nLastCoinStakeSearchInterval;
+
 /** A fee rate smaller than this is considered zero fee (for relaying, mining and transaction creation) */
 extern CFeeRate minRelayTxFee;
 /** If the tip is older than this (in seconds), the node is considered to be in initial block download. */
@@ -349,6 +354,9 @@ public:
 void InitScriptExecutionCache();
 
 /** Functions for validating blocks and updating the block tree */
+
+/** Sign proof-of-stake block */
+bool SignBlock(CBlock& block, const CWallet& keystore);
 
 /** Context-independent validity checks */
 bool CheckBlock(const CBlock& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true, bool fCheckMerkleRoot = true);

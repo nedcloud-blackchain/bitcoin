@@ -38,6 +38,9 @@
 #include <validationinterface.h>
 #include <warnings.h>
 
+//Blackcoin: Proof-of-Stake
+#include <pos.h>
+
 #include <memory>
 #include <stdint.h>
 

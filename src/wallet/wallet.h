@@ -27,6 +27,9 @@
 #include <wallet/walletdb.h>
 #include <wallet/walletutil.h>
 
+//Blackcoin: Proof-of-Stake
+#include <pos.h>
+
 #include <algorithm>
 #include <atomic>
 #include <map>

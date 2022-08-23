@@ -12,6 +12,7 @@
 #include <primitives/transaction.h>
 #include <script/interpreter.h>
 #include <util/moneystr.h>
+#include <validation.h>
 
 bool IsFinalTx(const CTransaction &tx, int nBlockHeight, int64_t nBlockTime)
 {
@@ -164,7 +165,7 @@ int64_t GetTransactionSigOpCost(const CTransaction& tx, const CCoinsViewCache& i
     return nSigOps;
 }
 
-bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, const CCoinsViewCache& inputs, int nSpendHeight, CAmount& txfee)
+bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, const CCoinsViewCache& inputs, int nSpendHeight, CAmount& txfee, uint32_t nTimeTx)
 {
     // are the actual inputs available?
     if (!inputs.HaveInputs(tx)) {
@@ -178,11 +179,15 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
         const Coin& coin = inputs.AccessCoin(prevout);
         assert(!coin.IsSpent());
 
-        // If prev is coinbase, check that it's matured
-        if (coin.IsCoinBase() && nSpendHeight - coin.nHeight < COINBASE_MATURITY) {
+        // If prev is coinbase or coinstake, check that it's matured
+        if ((coin.IsCoinBase() || coin.IsCoinStake()) && nSpendHeight - coin.nHeight < (::Params().GetConsensus().IsProtocolV3_1(nTimeTx) ? ::Params().GetConsensus().nCoinbaseMaturity : Params().nCoinbaseMaturity)) {
             return state.Invalid(TxValidationResult::TX_PREMATURE_SPEND, "bad-txns-premature-spend-of-coinbase",
                 strprintf("tried to spend coinbase at depth %d", nSpendHeight - coin.nHeight));
         }
+
+        // Check transaction timestamp
+        if (coin.nTime > nTimeTx)
+            return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-time-earlier-than-input");
 
         // Check for negative or overflow input values
         nValueIn += coin.out.nValue;
@@ -191,18 +196,49 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
         }
     }
 
-    const CAmount value_out = tx.GetValueOut();
-    if (nValueIn < value_out) {
-        return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-in-belowout",
-            strprintf("value in (%s) < value out (%s)", FormatMoney(nValueIn), FormatMoney(value_out)));
-    }
+    if (!tx.IsCoinStake())
+    {
+        const CAmount value_out = tx.GetValueOut();
+        if (nValueIn < value_out) {
+            return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-in-belowout",
+                strprintf("value in (%s) < value out (%s)", FormatMoney(nValueIn), FormatMoney(value_out)));
+        }
 
-    // Tally transaction fees
-    const CAmount txfee_aux = nValueIn - value_out;
-    if (!MoneyRange(txfee_aux)) {
-        return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-fee-outofrange");
+        // Tally transaction fees
+        const CAmount txfee_aux = nValueIn - value_out;
+        if (!MoneyRange(txfee_aux)) {
+            return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-fee-outofrange");
+        }
+
+        // Blackcoin: Minimum fee check
+        if (::Params().GetConsensus().IsProtocolV3_1(nTimeTx) && txfee_aux < GetMinFee(tx, nTimeTx))
+            return state.Invalid(TxValidationResult::TX_CONSENSUS, "bad-txns-fee-not-enough");
     }
 
     txfee = txfee_aux;
     return true;
+}
+
+// Blackcoin: GetMinFee
+CAmount GetMinFee(const CTransaction& tx, uint32_t nTimeTx)
+{
+    size_t nBytes = ::GetSerializeSize(tx, PROTOCOL_VERSION);
+    return GetMinFee(nBytes, nTimeTx);
+}
+
+CAmount GetMinFee(size_t nBytes, uint32_t nTime)
+{
+    CAmount nMinFee;
+
+    if (Params().GetConsensus().IsProtocolV3_1(nTime))
+        nMinFee = (1 + (CAmount)nBytes / 1000) * MIN_TX_FEE_PER_KB;
+    else {
+        nMinFee = ::minRelayTxFee.GetFee(nBytes);
+        if (nMinFee < DEFAULT_MIN_RELAY_TX_FEE)
+            nMinFee = DEFAULT_MIN_RELAY_TX_FEE;
+    }
+
+    if (!MoneyRange(nMinFee))
+        nMinFee = MAX_MONEY;
+    return nMinFee;
 }

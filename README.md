@@ -1,23 +1,23 @@
 Blackcoin Core integration/staging tree
 =====================================
 
-https://bitcoincore.org
+https://blackcoin.org
 
 For an immediately usable, binary version of the Blackcoin Core software, see
-https://bitcoincore.org/en/download/.
+https://bitcoin.org.
 
 Further information about Blackcoin Core is available in the [doc folder](/doc).
 
-What is Bitcoin?
+What is Blackcoin?
 ----------------
 
-Bitcoin is an experimental digital currency that enables instant payments to
-anyone, anywhere in the world. Bitcoin uses peer-to-peer technology to operate
+Blackcoin is an experimental digital currency that enables instant payments to
+anyone, anywhere in the world. Blackcoin uses peer-to-peer technology to operate
 with no central authority: managing transactions and issuing money are carried
 out collectively by the network. Blackcoin Core is the name of open source
 software which enables the use of this currency.
 
-For more information read the original Bitcoin whitepaper.
+For more information read the original Blackcoin whitepaper.
 
 License
 -------
@@ -28,7 +28,7 @@ information or see https://opensource.org/licenses/MIT.
 Development Process
 -------------------
 
-The `master` branch is regularly built (see `doc/build-*.md` for instructions) and tested, but it is not guaranteed to be
+The `main` branch is regularly built (see `doc/build-*.md` for instructions) and tested, but it is not guaranteed to be
 completely stable. [Tags](https://github.com/bitcoin/bitcoin/tags) are created
 regularly from release branches to indicate new official, stable release versions of Blackcoin Core.
 
